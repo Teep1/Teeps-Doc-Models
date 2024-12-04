@@ -1,0 +1,59 @@
+scalar Amount_Tokens
+scalar EthereumAddress
+scalar Amount_Percentage
+scalar EmailAddress
+scalar Date
+scalar DateTime
+scalar URL
+scalar Amount_Money
+scalar OLabel
+scalar Currency
+scalar PHID
+scalar OID
+type AccountsState {
+    accounts: [ AccountEntry! ]!
+}
+
+type AccountEntry {
+		id: OID!
+		name: OLabel  
+		account: EthereumAddress
+		budgetPath: String
+		type: AccountType
+}
+
+enum AccountType {
+	Protocol
+	Auditor
+	Operational
+	Payment Processor
+}
+
+
+
+# accounts
+
+input CreateAccountInput {
+  name: OLabel
+  account: EthereumAddress!
+  budgetPath: String
+  type: AccountType!
+}
+
+enum AccountType {
+	Protocol
+	Auditor
+	Operational
+	Payment Processor
+}
+
+input UpdateAccountInput {
+  name: OLabel
+  account: EthereumAddress
+  budgetPath: String
+  type: AccountType
+}
+
+input DeleteAccountInput {
+  id: ID!
+}
