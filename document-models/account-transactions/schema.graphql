@@ -1,0 +1,88 @@
+scalar Amount_Tokens
+scalar EthereumAddress
+scalar Amount_Percentage
+scalar EmailAddress
+scalar Date
+scalar DateTime
+scalar URL
+scalar Amount_Money
+scalar OLabel
+scalar Currency
+scalar PHID
+scalar OID
+type AccountTransactionsState {
+  transactions: [TransactionEntry!]!
+}
+
+type TransactionEntry {
+  id: ID!
+  fromAccount: EthereumAddress
+  toAccount: EthereumAddress
+  amount: Amount_Money!
+  datetime: DateTime!
+  details: TransactionDetails!
+}
+
+union TransactionDetails = CryptoTransactionDetails | BankTransactionDetails
+
+type CryptoTransactionDetails {
+  txHash: String!
+  token: Currency!
+  blockNumber: Int
+}
+
+type BankTransactionDetails {
+  currency: Currency!
+  transactionId: String
+  referenceNumber: String
+}
+
+
+
+
+# account_transactions
+
+input CreateTransactionInput {
+  fromAccount: EthereumAddress
+  toAccount: EthereumAddress!
+  amount: Amount_Money!
+  datetime: DateTime!
+  details: TransactionDetailsInput!
+}
+
+input TransactionDetailsInput {
+  __typename: String!
+  # For CryptoTransactionDetails
+  txHash: String
+  token: Currency
+  blockNumber: Int
+  # For BankTransactionDetails
+  currency: Currency
+  transactionId: String
+  referenceNumber: String
+}
+
+input UpdateTransactionInput {
+  fromAccount: EthereumAddress
+  toAccount: EthereumAddress
+  amount: Amount_Money
+  datetime: DateTime
+  details: TransactionDetailsInput
+}
+
+input TransactionDetailsInput {
+  __typename: String!
+  # For CryptoTransactionDetails
+  txHash: String
+  token: Currency
+  blockNumber: Int
+  # For BankTransactionDetails
+  currency: Currency
+  transactionId: String
+  referenceNumber: String
+}
+
+
+input DeleteTransactionInput {
+  id: ID!
+}
