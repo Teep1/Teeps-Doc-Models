@@ -32,6 +32,11 @@ export default function Editor(props: IProps) {
     }
   });
 
+  const [editingBudget, setEditingBudget] = useState<{
+    transactionId: string;
+    budget: string;
+  } | null>(null);
+
   const handleCreateTransaction = () => {
     const details = transactionType === "crypto" 
       ? {
@@ -68,6 +73,19 @@ export default function Editor(props: IProps) {
         blockNumber: ""
       }
     });
+  };
+
+  const handleUpdateBudget = (transactionId: string) => {
+    if (!editingBudget?.budget) return;
+    
+    dispatch(
+      actions.updateTransactionBudget({
+        txId: transactionId,
+        budgetId: editingBudget.budget
+      })
+    );
+    
+    setEditingBudget(null);
   };
 
   return (
@@ -191,6 +209,68 @@ export default function Editor(props: IProps) {
                   <p style={{ fontSize: "14px" }}>Currency: {transaction.details.currency}</p>
                   <p style={{ fontSize: "14px" }}>Reference: {transaction.details.referenceNumber}</p>
                 </>
+              )}
+            </div>
+            <div style={{ marginTop: "10px" }}>
+              {editingBudget?.transactionId === transaction.id ? (
+                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                  <input
+                    type="text"
+                    value={editingBudget.budget}
+                    onChange={(e) => setEditingBudget({
+                      ...editingBudget,
+                      budget: e.target.value
+                    })}
+                    placeholder="Enter budget ID"
+                    style={{ padding: "6px", borderRadius: "4px", border: "1px solid #ccc" }}
+                  />
+                  <button
+                    onClick={() => handleUpdateBudget(transaction.id)}
+                    style={{
+                      padding: "6px 12px",
+                      backgroundColor: "#28a745",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer"
+                    }}
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setEditingBudget(null)}
+                    style={{
+                      padding: "6px 12px",
+                      backgroundColor: "#6c757d",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer"
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                  <p style={{ fontSize: "14px" }}>Budget: {transaction.budget || 'Not assigned'}</p>
+                  <button
+                    onClick={() => setEditingBudget({
+                      transactionId: transaction.id,
+                      budget: transaction.budget || ''
+                    })}
+                    style={{
+                      padding: "6px 12px",
+                      backgroundColor: "#17a2b8",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer"
+                    }}
+                  >
+                    Edit Budget
+                  </button>
+                </div>
               )}
             </div>
             <div style={{ marginTop: "10px" }}>

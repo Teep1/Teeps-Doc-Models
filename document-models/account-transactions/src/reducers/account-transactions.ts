@@ -16,39 +16,54 @@ export const reducer: AccountTransactionsAccountTransactionsOperations = {
       amount: action.input.amount,
       datetime: action.input.datetime,
       details: action.input.details,
+      budget: action.input.budget
     });
   },
 
   updateTransactionOperation(state, action, dispatch) {
-    // Move error check to the beginning
-    if (!state.transactions.some(transaction => transaction.id === action.input.id)) {
+    const transaction = state.transactions.find(tx => tx.id === action.input.id);
+    if (!transaction) {
       throw new Error(`Transaction with id ${action.input.id} not found`);
     }
 
-    const transactionIndex = state.transactions.findIndex(
-      transaction => transaction.id === action.input.id
-    );
-    
-    const transaction = state.transactions[transactionIndex];
-    
-    state.transactions[transactionIndex] = {
-      ...transaction,
-      fromAccount: action.input.fromAccount ?? transaction.fromAccount,
-      toAccount: action.input.toAccount ?? transaction.toAccount,
-      amount: action.input.amount ?? transaction.amount,
-      datetime: action.input.datetime ?? transaction.datetime,
-      details: action.input.details ?? transaction.details,
-    };
+    // Update transaction properties if provided in the input
+    if (action.input.fromAccount !== undefined) {
+      transaction.fromAccount = action.input.fromAccount;
+    }
+    if (action.input.toAccount !== undefined) {
+      transaction.toAccount = action.input.toAccount;
+    }
+    if (action.input.amount !== undefined) {
+      transaction.amount = action.input.amount;
+    }
+    if (action.input.datetime !== undefined) {
+      transaction.datetime = action.input.datetime;
+    }
+    if (action.input.details !== undefined) {
+      transaction.details = action.input.details;
+    }
+    if (action.input.budget !== undefined) {
+      transaction.budget = action.input.budget;
+    }
   },
 
   deleteTransactionOperation(state, action, dispatch) {
-    // Move error check to the beginning
-    if (!state.transactions.some(transaction => transaction.id === action.input.id)) {
+    // Verify transaction exists before deletion
+    const transaction = state.transactions.find(tx => tx.id === action.input.id);
+    if (!transaction) {
       throw new Error(`Transaction with id ${action.input.id} not found`);
     }
 
-    state.transactions = state.transactions.filter(
-      transaction => transaction.id !== action.input.id
-    );
+    // Remove transaction from the transactions array
+    state.transactions = state.transactions.filter(tx => tx.id !== action.input.id);
+  },
+
+  updateTransactionBudgetOperation(state, action, dispatch) {
+    const transaction = state.transactions.find(tx => tx.id === action.input.txId);
+    if (!transaction) {
+      throw new Error(`Transaction with id ${action.input.txId} not found`);
+    }
+
+    transaction.budget = action.input.budgetId;
   },
 };

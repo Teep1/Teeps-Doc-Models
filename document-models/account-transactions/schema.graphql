@@ -12,6 +12,7 @@ scalar PHID
 scalar OID
 type AccountTransactionsState {
   transactions: [TransactionEntry!]!
+  budgets: [Budget!]!
 }
 
 type TransactionEntry {
@@ -21,6 +22,7 @@ type TransactionEntry {
   amount: Amount_Money!
   datetime: DateTime!
   details: TransactionDetails!
+  budget: OID
 }
 
 union TransactionDetails = CryptoTransactionDetails | BankTransactionDetails
@@ -37,6 +39,11 @@ type BankTransactionDetails {
   referenceNumber: String
 }
 
+type Budget {
+  id: OID!
+  name: OLabel
+}
+
 
 
 
@@ -44,22 +51,33 @@ type BankTransactionDetails {
 
 input CreateTransactionInput {
   fromAccount: EthereumAddress
-  toAccount: EthereumAddress!
+  toAccount: EthereumAddress
   amount: Amount_Money!
   datetime: DateTime!
   details: TransactionDetailsInput!
+  budget: OID
 }
 
 input TransactionDetailsInput {
-  __typename: String!
-  # For CryptoTransactionDetails
-  txHash: String
-  token: Currency
+  crypto: CryptoTransactionDetailsInput
+  bank: BankTransactionDetailsInput
+}
+
+input CryptoTransactionDetailsInput {
+  txHash: String!
+  token: Currency!
   blockNumber: Int
-  # For BankTransactionDetails
-  currency: Currency
+}
+
+input BankTransactionDetailsInput {
+  currency: Currency!
   transactionId: String
   referenceNumber: String
+}
+
+input Budget {
+  id: OID!
+  name: OLabel
 }
 
 input UpdateTransactionInput {
@@ -68,21 +86,36 @@ input UpdateTransactionInput {
   amount: Amount_Money
   datetime: DateTime
   details: TransactionDetailsInput
+  budget: OID
 }
 
 input TransactionDetailsInput {
-  __typename: String!
-  # For CryptoTransactionDetails
+  crypto: CryptoTransactionDetailsInput
+  bank: BankTransactionDetailsInput
+}
+
+input CryptoTransactionDetailsInput {
   txHash: String
   token: Currency
   blockNumber: Int
-  # For BankTransactionDetails
+}
+
+input BankTransactionDetailsInput {
   currency: Currency
   transactionId: String
   referenceNumber: String
 }
 
+input Budget {
+  id: OID!
+  name: OLabel
+}
 
 input DeleteTransactionInput {
   id: ID!
+}
+
+input UpdateTransactionBudgetInput {
+  txId: ID!,
+  budgetId: OID!
 }
