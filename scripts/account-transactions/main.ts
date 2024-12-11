@@ -1,4 +1,4 @@
-import { DocumentDriveServer } from "document-drive";
+import { DocumentDriveServer, IBaseDocumentDriveServer, IDocumentDriveServer } from "document-drive";
 import {
     module as DocumentModelLib,
 } from 'document-model/document-model';
@@ -9,20 +9,21 @@ import {
     DocumentDriveDocument
 } from 'document-model-libs/document-drive';
 import * as DocumentModelsLibs from 'document-model-libs/document-models';
-import { AccountTransactionsDocument, actions as accActions, reducer as accReducer, CreateTransactionInput } from 'document-models/account-transactions';
+import { AccountTransactionsDocument, actions as accActions, reducer as accReducer, CreateTransactionInput } from '../../document-models/account-transactions';
 import { ActionSigner, DocumentModel } from "document-model/document";
+import * as LocalDocumentModels from '../../document-models';
 import { v4 as uuid } from "uuid";
 import dotenv from "dotenv";
 import jsonTransactions from './transactions.json';
 dotenv.config();
 
-const deleteFoldersAndFiles = async (driveServer: DocumentDriveServer, driveId: string) => {
-    const documents = await driveServer.getDocuments(driveId);
-    return Promise.all(documents.map(e => driveServer.deleteDocument(driveId, e)))
-}
+// const deleteFoldersAndFiles = async (driveServer: IDocumentDriveServer, driveId: string) => {
+//     const documents = await driveServer.getDocuments(driveId);
+//     return Promise.all(documents.map(e => driveServer.deleteDocument(driveId, e)))
+// }
 
 
-const addFoldersAndDocuments = async (driveServer: DocumentDriveServer, driveName: string) => {
+const addFoldersAndDocuments = async (driveServer: IBaseDocumentDriveServer, driveName: string) => {
     let docId = uuid()
     let folderId = uuid();
     let drive = await driveServer.getDrive(driveName);
@@ -56,7 +57,7 @@ const addFoldersAndDocuments = async (driveServer: DocumentDriveServer, driveNam
     );
 
     // queue last 1 drive operations
-    const driveOperations = drive.operations.global.slice(-1);
+    const driveOperations = drive.operations.global.slice(-2);
     await driveServer.queueDriveOperations(driveName, driveOperations);
 
     // retrieve new created document
@@ -68,7 +69,8 @@ const addFoldersAndDocuments = async (driveServer: DocumentDriveServer, driveNam
     for (let rawTransaction of transactions) {
 
         const transaction: CreateTransactionInput = {
-            amount: rawTransaction.amount,
+            id: uuid(),
+            amount: Number(rawTransaction.amount),
             datetime: rawTransaction.datetime,
             details: {
                 crypto: {
@@ -79,22 +81,20 @@ const addFoldersAndDocuments = async (driveServer: DocumentDriveServer, driveNam
             },
             fromAccount: rawTransaction.sender,
             toAccount: rawTransaction.receiver,
-            budget: "budget not defined",
+            budget: ''
         }
 
-        // create gramt
+        // create transaction
         document = accReducer(
             document,
             accActions.createTransaction(transaction)
         );
 
-
-        console.log('document', document.state.global)
-
         // queue new created operations for processing
-        const result = await driveServer.queueOperations(driveName, docId, document.operations.global.slice(-1 * (1)));
-        console.log('Adding transaction', result.document?.state?.global?.transactions);
-        await sleep(4000)
+        const result = await driveServer.queueOperations(driveName, docId, document.operations.global.slice(-1));
+        const documentResult: AccountTransactionsDocument = result.document as AccountTransactionsDocument;
+        console.log('Adding transaction', documentResult.state.global.transactions);
+        // await sleep(500)
     }
 
 }
@@ -106,8 +106,10 @@ function sleep(milliseconds: number) {
 async function main() {
     console.time('script');
     // select document models
+    
     const documentModels = [
         DocumentModelLib,
+        ...Object.values(LocalDocumentModels),
         ...Object.values(DocumentModelsLibs)
     ] as DocumentModel[];
 
@@ -116,7 +118,7 @@ async function main() {
     await driveServer.initialize();
 
     // if remote document drive is given init remote drive otherwise add local drive
-    const remoteDriveUrl = process.env.REMOTE_DOCUMENT_DRIVE ?? undefined
+    const remoteDriveUrl = 'http://localhost:4001/d/powerhouse';
     if (!remoteDriveUrl) {
         throw new Error("Remote Drive not configured");
     }
