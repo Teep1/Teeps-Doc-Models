@@ -1,4 +1,4 @@
-import { DocumentDriveServer, IBaseDocumentDriveServer, IDocumentDriveServer } from "document-drive";
+import { DocumentDriveServer, IBaseDocumentDriveServer } from "document-drive";
 import {
     module as DocumentModelLib,
 } from 'document-model/document-model';

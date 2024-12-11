@@ -87,6 +87,7 @@
   },
   "description": "",
   "dependencies": {
-    "canvas-confetti": "^1.9.3"
+    "canvas-confetti": "^1.9.3",
+    "document-drive": "^1.9.0"
   }
 }
