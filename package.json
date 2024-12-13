@@ -1,5 +1,5 @@
 {
-  "name": "accounttransactionsproject",
+  "name": "document-model-boilerplate",
   "version": "1.0.0",
   "license": "AGPL-3.0-only",
   "types": "dist/index.d.ts",
@@ -7,87 +7,90 @@
   "module": "dist/index.js",
   "type": "module",
   "files": [
-    "/dist"
+      "/dist"
   ],
   "exports": {
-    ".": {
-      "import": "./dist/es/index.js",
-      "require": "./dist/cjs/index.cjs",
-      "types": "./dist/index.d.ts"
-    },
-    "./editors": {
-      "import": "./dist/es/editors.js",
-      "require": "./dist/cjs/editors.cjs",
-      "types": "./dist/editors.d.ts"
-    },
-    "./document-models": {
-      "import": "./dist/es/documentModels.js",
-      "require": "./dist/cjs/documentModels.cjs",
-      "types": "./dist/documentModels.d.ts"
-    }
+      ".": {
+          "types": "./dist/index.d.ts",
+          "import": "./dist/es/index.js",
+          "require": "./dist/cjs/index.cjs"
+      },
+      "./editors": {
+          "types": "./dist/editors.d.ts",
+          "import": "./dist/es/editors.js",
+          "require": "./dist/cjs/editors.cjs"
+      },
+      "./document-models": {
+          "types": "./dist/documentModels.d.ts",
+          "import": "./dist/es/documentModels.js",
+          "require": "./dist/cjs/documentModels.cjs"
+      }
   },
   "scripts": {
-    "generate": "powerhouse generate",
-    "reactor": "ph dev",
-    "format-generated": "npx prettier \"**/gen/**/*\" --write --ignore-path /dev/null",
-    "postgenerate": "npm run format-generated",
-    "check-types": "tsc",
-    "postlint": "npm run check-types",
-    "lint": "eslint",
-    "build": "npm run generate && vite build",
-    "storybook": "npm run install:storybook && npm run generate && storybook dev -p 6006",
-    "build-storybook": "npm run generate && storybook build",
-    "test": "vitest run",
-    "test:nogen": "vitest run",
-    "test:watch": "vitest",
-    "prepublishOnly": "npm run build",
-    "connect": "connect --config-file ./powerhouse.config.json",
-    "install:storybook": "tsx scripts/index.ts"
+      "generate": "powerhouse generate",
+      "reactor": "ph dev",
+      "format-generated": "npx prettier \"**/{gen,processors,editors}/**/*\" --write --ignore-path --no-error-on-unmatched-pattern >> /dev/null",
+      "postgenerate": "npm run format-generated",
+      "check-types": "tsc",
+      "postlint": "npm run check-types",
+      "lint": "eslint",
+      "build": "npm run generate && vite build",
+      "storybook": "npm run install:storybook && npm run generate && storybook dev -p 6006",
+      "build-storybook": "npm run generate && storybook build",
+      "test": "vitest run",
+      "test:nogen": "vitest run",
+      "test:watch": "vitest",
+      "prepublishOnly": "npm run build",
+      "connect": "connect --config-file ./powerhouse.config.json",
+      "install:storybook": "tsx scripts/index.ts"
   },
   "peerDependencies": {
-    "document-model": "^2.7.1",
-    "document-model-libs": "^1.117.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+      "document-model": "^2.13.0",
+      "document-model-libs": "^1.122.5",
+      "react": "^18.3.1",
+      "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.1.1",
-    "@eslint/eslintrc": "^3.1.0",
-    "@eslint/js": "^9.11.1",
-    "@powerhousedao/codegen": "^0.17.0",
-    "@powerhousedao/connect": "develop",
-    "@powerhousedao/design-system": "^1.10.0",
-    "@powerhousedao/ph-cli": "^0.11.0",
-    "@powerhousedao/scalars": "^1.9.0",
-    "@types/eslint__js": "^8.42.3",
-    "@types/node": "^22.7.3",
-    "@types/react": "^18.3.9",
-    "@typescript-eslint/eslint-plugin": "^8.7.0",
-    "@typescript-eslint/parser": "^8.7.0",
-    "document-model": "^2.7.1",
-    "document-model-libs": "^1.117.0",
-    "eslint": "^9.11.1",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-react": "^7.37.0",
-    "globals": "^15.9.0",
-    "package-manager-detector": "^0.2.5",
-    "prettier": "^3.3.3",
-    "prettier-plugin-organize-imports": "^4.1.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "tsx": "^4.19.2",
-    "typescript": "^5.6.2",
-    "typescript-eslint": "^8.7.0",
-    "vite": "^5.4.8",
-    "vite-plugin-dts": "^4.2.2",
-    "vite-plugin-generate-file": "^0.2.0",
-    "vitest": "^2.1.1",
-    "zod": "^3.23.8"
-  },
-  "description": "",
-  "dependencies": {
-    "canvas-confetti": "^1.9.3",
-    "document-drive": "^1.9.0"
+      "@eslint/compat": "^1.2.4",
+      "@eslint/eslintrc": "^3.2.0",
+      "@eslint/js": "^9.16.0",
+      "@powerhousedao/analytics-engine-core": "^0.3.0",
+      "@powerhousedao/codegen": "^0.23.3",
+      "@powerhousedao/config": "1.2.0",
+      "@powerhousedao/connect": "1.0.0-dev.179",
+      "@powerhousedao/design-system": "1.16.3",
+      "@powerhousedao/ph-cli": "0.12.2",
+      "@powerhousedao/reactor-api": "^1.10.9",
+      "@powerhousedao/scalars": "1.13.0",
+      "@types/eslint__js": "^8.42.3",
+      "@types/node": "^22.10.2",
+      "@types/react": "^18.3.16",
+      "@typescript-eslint/eslint-plugin": "^8.18.0",
+      "@typescript-eslint/parser": "^8.18.0",
+      "autoprefixer": "^10.4.20",
+      "document-model": "2.12.0",
+      "document-model-libs": "1.121.2",
+      "eslint": "^9.16.0",
+      "eslint-config-prettier": "^9.1.0",
+      "eslint-plugin-prettier": "^5.2.1",
+      "eslint-plugin-react": "^7.37.2",
+      "globals": "^15.13.0",
+      "package-manager-detector": "^0.2.7",
+      "postcss": "^8.4.49",
+      "prettier": "^3.4.2",
+      "prettier-plugin-organize-imports": "^4.1.0",
+      "react": "^18.3.1",
+      "react-dom": "^18.3.1",
+      "tailwind-scrollbar": "^3.1.0",
+      "tailwindcss": "^3.4.16",
+      "tailwindcss-animate": "^1.0.7",
+      "tsx": "^4.19.2",
+      "typescript": "^5.7.2",
+      "typescript-eslint": "^8.18.0",
+      "vite": "^6.0.3",
+      "vite-plugin-dts": "^4.3.0",
+      "vite-plugin-generate-file": "^0.2.0",
+      "vitest": "^2.1.8",
+      "zod": "^3.24.1"
   }
 }

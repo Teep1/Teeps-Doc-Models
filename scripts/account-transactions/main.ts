@@ -70,12 +70,12 @@ const addFoldersAndDocuments = async (driveServer: IBaseDocumentDriveServer, dri
 
         const transaction: CreateTransactionInput = {
             id: uuid(),
-            amount: Number(rawTransaction.amount),
+            amount: Number(rawTransaction.value),
             datetime: rawTransaction.datetime,
             details: {
                 crypto: {
-                    txHash: rawTransaction.tx_hash,
-                    token: "token not defined",
+                    txHash: rawTransaction.txHash,
+                    token: rawTransaction.contract,
                     blockNumber: rawTransaction.block_number,
                 }
             },
