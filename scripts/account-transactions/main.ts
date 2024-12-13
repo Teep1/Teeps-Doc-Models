@@ -14,7 +14,7 @@ import { ActionSigner, DocumentModel } from "document-model/document";
 import * as LocalDocumentModels from '../../document-models';
 import { v4 as uuid } from "uuid";
 import dotenv from "dotenv";
-import jsonTransactions from './transactions.json';
+import jsonTransactions from '../../server/transactions.json';
 dotenv.config();
 
 // const deleteFoldersAndFiles = async (driveServer: IDocumentDriveServer, driveId: string) => {
@@ -30,7 +30,7 @@ const addFoldersAndDocuments = async (driveServer: IBaseDocumentDriveServer, dri
     let document: AccountTransactionsDocument;
 
     // Getting transactions from json
-    const transactions = jsonTransactions.results;
+    const transactions = jsonTransactions.erc20Transfers;
 
     // Create a new folder for the account transactions
     drive = reducer(

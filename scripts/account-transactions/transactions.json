@@ -1,17 +1,13 @@
 [
-    {
-      "erc20": [
-        {
-          "blockNumber": 21390304,
-          "blockTimestamp": 1734053267000,
-          "contract": "0x028171bca77440897b824ca71d1c56cac55b68a3",
-          "receiver": "0x464c71f6c2f760dda6093dcb91c24c39e5d6e18c",
-          "sender": "0x0000000000000000000000000000000000000000",
-          "txHash": "0x5008802a68fba7b92a5975b2a37eef01241a54cc95b40c5a46f2c3c7cc530e9d",
-          "txIndex": "0x5d",
-          "type": "ERC20",
-          "value": "1065846835906557996125"
-        }
-      ]
-    }
-  ]
+  {
+    "blockNumber": 21390304,
+    "blockTimestamp": 1734053267000,
+    "contract": "0x028171bca77440897b824ca71d1c56cac55b68a3",
+    "receiver": "0x464c71f6c2f760dda6093dcb91c24c39e5d6e18c",
+    "sender": "0x0000000000000000000000000000000000000000",
+    "txHash": "0x5008802a68fba7b92a5975b2a37eef01241a54cc95b40c5a46f2c3c7cc530e9d",
+    "txIndex": "0x5d",
+    "type": "ERC20",
+    "value": "1065846835906557996125"
+  }
+]
